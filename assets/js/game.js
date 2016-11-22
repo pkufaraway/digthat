@@ -1,17 +1,7 @@
+var Vue = require('./lib/vue.js')
 new Vue({
-    el: '#editor',
+    el: '#app-6',
     data: {
-        input: '# hello'
-    },
-    computed: {
-        compiledMarkdown: function () {
-            console.log(this.input)
-            return marked(this.input, { sanitize: true })
-        }
-    },
-    methods: {
-        update: _.debounce(function (e) {
-            this.input = e.target.value
-        }, 300)
+        message: 'Hello Vue!'
     }
 })
