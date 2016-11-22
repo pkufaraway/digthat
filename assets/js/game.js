@@ -1,7 +1,8 @@
-var Vue = require('./lib/vue.js')
+var Vue = require('./lib/vue.js');
 new Vue({
-    el: '#app-6',
+    el: '#gamearea',
     data: {
-        message: 'Hello Vue!'
+        length: 6,
+        message: 'Hello Vue!',
     }
 })

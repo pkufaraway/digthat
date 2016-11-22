@@ -1,14 +1,60 @@
 <head>
     <link rel="stylesheet" type="text/css" href="assets/css/main.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/animate.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
 
 </head>
 
 <body>
-<div id="app-6">
-    <p>{{ message }}</p>
-    <input v-model="message">
-</div>
+<div id="gamearea">
+    <div id="gridWrapper">
+        <p>{{message}}</p>
+        <div id = "row" v-for = "m in length" class = row>
+            <div id ="edgeline" class=row>
+                <div id="line" v-for="n in length" class = edgeWrapper>
+                    <div class="corner probe probeAnim" v-bind:x='m - 1' v-bind:y='n - 1'></div>
+                    <div class="hedgeAnim hedge edge" v-bind:x='m - 1' v-bind:y='n - 1'></div>
+                </div>
+                <div class="corner probe probeAnim" v-bind:x='m - 1' v-bind:y='length'></div>
+            </div>
+            <div id ="vedgeline" class=row>
+                <div id="vedges" v-for="n in (length + 1)" class = edgeWrapper>
+                    <div class="vedge vedgeAnim edge" v-bind:x='m - 1' v-bind:y='n - 1'></div>
+                    <div class="left"></div>
+                </div>
+            </div>
+        </div>
+        <div id ="lastline" class=row>
+            <div v-for="n in length" class = edgeWrapper>
+                <div class="corner probe probeAnim" v-bind:x='length' v-bind:y='n - 1'></div>
+                <div class="hedgeAnim hedge edge" v-bind:x='length' v-bind:y='n - 1'></div>
+            </div>
+        </div>
+        <div class="corner probe probeAnim" v-bind:x='length' v-bind:y='length'></div>
+    </div>
 
-    <script type="text/javascript" src="assets/js/bundle.js" charset="utf-8"></script>
+    <div id="infoPanel">
+        <div id="tunnelInfo"></div>
+        <div id="remainingPieces"></div>
+        <div id="currentTunnel"></div>
+        <div id="probeCount"></div>
+        <div id="message"></div>
+        <div class="btnbody">
+            <input type="button" class="button grad transition" id="start" value="Play with Two People" style="display: block">
+            <input type="button" class="button grad transition" id="startEasy" value="Play in Easy Mode" style="display: block">
+            <input type="button" class="button grad transition" id="startAI" value="Play with AI" style="display: block">
+            <input type="button" class="button grad transition" id="startEasyAI" value="Play with AI in Easy Mode" style="display: block">
+            <input type="button" class="button grad transition" id="tunnelDone" value="I'm done building my tunnel." style="display: none">
+            <input type="button" class="button grad transition" id="probesPlaced1" value="Done placing first round of probes." style="display: none">
+            <input type="button" class="button grad transition" id="probesPlaced2" value="Done placing another round of probes." style="display: none">
+            <input type="button" class="button grad transition" id="submitGuess" value="Ready to submit final guess." style="display: none">
+            <button id="score" style="display:none" onClick="postScore(winningScore, winningPlayer)" type="button">Save Score</button>
+        </div>
+        <div class="badguy"></div>
+        <div class="detector"></div>
+    </div>
+
+</div>
+<script type="text/javascript" src="assets/js/bundle.js" charset="utf-8"></script>
+
 </body>
