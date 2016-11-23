@@ -1,4 +1,3 @@
-require("./edge.js");
 var $ = require("jquery");
 // Global variables
 var boardSize = 6;
@@ -29,21 +28,7 @@ var gameState = -1;
 // 4 = detector detecting
 
 
-// Clear the board before a new game
-var clearBoard = function () {
-    $(".animate").filter(function() {
-        $(this).removeClass("animate");
-    });
-    $(".final").filter(function() {
-        $(this).removeClass("final");
-    });
-    $(".detectedEdge").filter(function() {
-        $(this).removeClass("detectedEdge");
-    });
-    $(".reveal").filter(function() {
-        $(this).removeClass("reveal");
-    });
-}
+
 
 function Node(id) {
     this.edges = [];
@@ -290,106 +275,9 @@ Tunnel.prototype.toString = function tunnelToString() {
 }
 
 // Determine if was clicked before or not and add/remove edge from tunnel class
-var edges = document.getElementsByClassName("edge");
 
-var edgeClicked = function() {
-    var edgeId = this.getAttribute('x');
-    console.log(edgeId)
-    if (gameState == 0) {
-        $(this).toggleClass("animate");
-        if (edgeId in tunnel.edges) {
-            // Get nodes
-            tunnelLength++;
-            var n1 = tunnel.edges[edgeId].n1;
-            var n2 = tunnel.edges[edgeId].n2;
-            // Remove this edge from each node's edge list
-            n1.removeEdge(tunnel.edges[edgeId]);
-            n2.removeEdge(tunnel.edges[edgeId]);
-            if (n1.edges.length == 0) {
-                tunnel.removeNode(n1);
-            }
-            if (n2.edges.length == 0) {
-                tunnel.removeNode(n2);
-            }
-            tunnel.removeEdge(tunnel.edges[edgeId]);
-        } else {
-            // Check if there are no pieces
-            if (tunnelLength <= 0) {
-                remainingPieces.innerHTML = "There are no remaining edges! Please remove an edge to continue building.";
-                return;
-            }
-            tunnelLength--;
-            if (edgeId[0] == "h") {
-                console.log("slice: ", edgeId.slice(1));
-                var rNum = Math.floor(edgeId.slice(1) / boardSize);
-                console.log("rNum: ", rNum);
-                var n1Id = Number(edgeId.slice(1)) + rNum;
-                var n2Id = (n1Id + 1).toString();
-                console.log("n1Id: ", n1Id);
-                console.log("n2Id: ", n2Id);
-                var n1;
-                var n2;
 
-                if (n1Id in tunnel.nodes) {
-                    n1 = tunnel.nodes[n1Id];
-                } else {
-                    n1 = new Node(n1Id);
-                    tunnel.addNode(n1);
-                }
 
-                if (n2Id in tunnel.nodes) {
-                    n2 = tunnel.nodes[n2Id];
-                } else {
-                    n2 = new Node(n2Id);
-                    tunnel.addNode(n2);
-                }
-
-                var newEdge = new Edge(n1, n2, edgeId);
-                tunnel.addEdge(newEdge);
-                n1.addEdge(newEdge);
-                n2.addEdge(newEdge);
-            } else {
-                var n1Id = edgeId.slice(1);
-                var n2Id = (Number(edgeId.slice(1)) + boardSize + 1).toString();
-                console.log("n1Id: ", n1Id);
-                console.log("n2Id: ", n2Id);
-                var n1;
-                var n2;
-
-                if (n1Id in tunnel.nodes) {
-                    n1 = tunnel.nodes[n1Id];
-                } else {
-                    n1 = new Node(n1Id);
-                    tunnel.addNode(n1);
-                }
-
-                if (n2Id in tunnel.nodes) {
-                    n2 = tunnel.nodes[n2Id];
-                } else {
-                    n2 = new Node(n2Id);
-                    tunnel.addNode(n2);
-                }
-
-                var newEdge = new Edge(n1, n2, edgeId);
-                tunnel.addEdge(newEdge);
-                n1.addEdge(newEdge);
-                n2.addEdge(newEdge);
-            }
-        }
-
-        // this.style.background = this.style.background=='yellow'? '#63f9ff':'yellow';
-        remainingPieces.innerHTML = "Edges left: " + tunnelLength;
-        console.log(tunnel.edges);
-        console.log("Tunnel nodes: ", tunnel.nodes);
-    } else if (gameState == 4) {
-        if (finalTunnelGuess.indexOf(edgeId) > -1) {
-            finalTunnelGuess.splice(finalTunnelGuess.indexOf(edgeId), 1);
-        } else {
-            finalTunnelGuess.push(edgeId);
-        }
-        $(this).toggleClass("final");
-    }
-};
 
 
 

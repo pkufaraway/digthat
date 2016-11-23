@@ -207,6 +207,13 @@ body {
     background-color: #f5f8fa !important;
 }
 
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+}
+.fade-enter, .fade-leave-active {
+    opacity: 0
+}
+
 #infoPanel {
     /*border: gray solid 1px;*/
     border: none;
