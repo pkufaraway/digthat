@@ -1,13 +1,17 @@
 var tunnel = [];
 var nodePrepare = [];
 var edgePrepare = [];
+var finalTunnel = [];
 var size;
-
+var score = 0;
+var mapLength;
 var connectedNode = function (node, edge) {
   if(edge.type == "hedge"){
-      return edge.x ==  node.x && (edge.y == node.y || edge.y + 1 == node.y);
+      var result = edge.x ==  node.x && (edge.y == node.y || edge.y + 1 == node.y);
+      return result;
   } else {
-      return edge.y == node.y && (edge.x == node.x || edge.x + 1 == node.x);
+      result = edge.y == node.y && (edge.x == node.x || edge.x + 1 == node.x);
+      return result;
   }
 };
 
@@ -55,28 +59,20 @@ var tryGo = function (startEdge){
 };
 
 module.exports = function (length) {
-    size = length;
+    mapLength = length;
+    size = Math.floor(Math.random() * (4 * length - 2 * length)) + 2 * length;
     return{
         //Adding tunneling APIs
-        selectEdge: function (edge) {
-            if(tunnel.indexOf(edge) < 0) {
-                if (tunnel.length < size) {
-                    tunnel.push(edge);
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                tunnel = tunnel.filter(
-                    function (myEdge) {
-                        return myEdge != edge;
-                    }
-                );
-            }
+        getSize: function () {
+            return size;
         },
 
         edgeLeft: function () {
             return size - tunnel.length;
+        },
+
+        finishGuess: function () {
+            alert("123");
         },
 
         isValid: function (length) {
@@ -101,37 +97,97 @@ module.exports = function (length) {
             return false;
         },
 
+        finalGuess: function () {
+            var tunnelLeft = finalTunnel.filter(
+                function (edge) {
+                    return tunnel.filter(
+                        function (newEdge) {
+                            return newEdge == edge;
+                        }
+                    ).length > 0;
+                }
+            );
+            if (tunnelLeft.length == finalTunnel.length) {
+                console.log(edgePrepare);
+                console.log(nodePrepare);
+                return edgePrepare.length + nodePrepare.length * 2;
+            } else {
+                return -1;
+            }
+        },
+
+        finalSelectEdge: function(edge) {
+            if (finalTunnel.indexOf(edge) < 0 && finalTunnel.length < size) {
+                finalTunnel.push(edge);
+                console.log(finalTunnel);
+                return true;
+            } else {
+                if (finalTunnel.indexOf(edge) >= 0) {
+                    finalTunnel = finalTunnel.filter(
+                        function (myEdge) {
+                            return myEdge != edge;
+                        }
+                    );
+                    console.log(finalTunnel);
+                    return true;
+                }
+                return false;
+            }
+        },
+
+
+        selectEdge: function (edge) {
+            if(tunnel.indexOf(edge) < 0 && tunnel.length < size) {
+                tunnel.push(edge);
+                console.log(tunnel);
+                return true;
+            } else {
+                if (tunnel.indexOf(edge) >= 0){
+                    tunnel = tunnel.filter(
+                        function (myEdge) {
+                            return myEdge != edge;
+                        }
+                    );
+                    console.log(tunnel);
+                    return true;
+                }
+                return false;
+            }
+        },
+
         //Guess Part APIs
         prepareEdge: function (edge) {
-            if(edgePrepare.indexOf(edge) <= 0) {
-                if (tunnel.indexOf(edge) != -1) {
+            if (edge.selected == 0) {
+                if (edgePrepare.indexOf(edge) < 0) {
                     edgePrepare.push(edge);
+                    edge.selected = 1;
                 }
-            } else {
+            } else if (edge.selected == 1) {
                 edgePrepare = edgePrepare.filter(function (myEdge) {
                     return myEdge != edge;
-                })
+                });
+                edge.selected = 0;
             }
         },
 
         prepareNode: function (node) {
-            if(nodePrepare.indexOf(node) <= 0) {
-                var edgesConnected = tunnel.filter(function (edge) {
-                    return connectedNode(node, edge);
-                });
-                if (edgesConnected.length > 0) {
+            if (node.selected == 0) {
+                if (nodePrepare.indexOf(node) < 0) {
                     nodePrepare.push(node);
+                    node.selected = 1;
                 }
-            } else {
-                nodePrepare = nodePrepare.filter(function (myNode) {
-                    return myNode != node;
-                })
+            } else if (node.selected == 1){
+                    nodePrepare = nodePrepare.filter(function (myNode) {
+                        return myNode != node;
+                    });
+                    node.selected = 0;
             }
         },
 
         guessResult: function () {
             var goodEdges = edgePrepare.filter(
                 function (prepareEdge) {
+                    prepareEdge.selected = 2;
                     return tunnel.indexOf(prepareEdge) >= 0;
                 }
             );
@@ -142,14 +198,20 @@ module.exports = function (length) {
             );
             var goodNodes = nodePrepare.filter(
                 function (node) {
+                    node.selected = 2;
                     var searchResult = tunnel.filter(
                         function (edge) {
                             return connectedNode(node, edge);
                         }
                     );
-                    return searchResult > 0;
+                    console.log(node);
+                    console.log(searchResult);
+                    return searchResult.length > 0;
                 }
             );
+
+            console.log("goodnodes");
+            console.log(goodNodes);
             var badNodes = nodePrepare.filter(
                 function (node) {
                     return goodNodes.indexOf(node) < 0;
@@ -163,10 +225,17 @@ module.exports = function (length) {
             };
         },
 
-        resetTunnel: function (length) {
+        resetTunnel: function () {
+            var n = nodePrepare.length;
+            for(var i = 0; i < n; i++){
+                nodePrepare[i].selected = false;
+            }
+            n = edgePrepare.length;
+            for(var i = 0; i < n; i++){
+                edgePrepare[i].selected = false;
+            }
             nodePrepare = [];
             edgePrepare = [];
-            size = length;
             tunnel = [];
         }
         

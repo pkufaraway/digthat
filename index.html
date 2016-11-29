@@ -60,7 +60,12 @@
             <transition name="fade">
                 <div id="guessInfo" v-if="showGuessInfo()">
                     <p>Prepare to guess now</p>
-                    <input type="button" v-on:click="finishPrepare()" value="I finished my guess">
+                    <input type="button" v-on:click="finishPrepare()" value="Finish this Round">
+                </div>
+            </transition>
+            <transition name="fade">
+                <div id="finishGuess" v-if="showFinishGuessInfo()">
+                    <input type="button" v-on:click="finishGuess()" value="Finish Guess">
                 </div>
             </transition>
             <input type="button" class="button grad transition" id="startEasy" value="Play in Easy Mode" style="display: block">

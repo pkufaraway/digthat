@@ -18,7 +18,8 @@ var initMap = function (length) {
                     bad: false
                 },
                 x: i,
-                y: j
+                y: j,
+                selected: 0,
             };
         }
     }
@@ -38,7 +39,8 @@ var initMap = function (length) {
                 },
                 type: "hedge",
                 x: i,
-                y: j
+                y: j,
+                selected: 0
             };
         }
     }
@@ -58,7 +60,8 @@ var initMap = function (length) {
                 },
                 type: "vedge",
                 x: i,
-                y: j
+                y: j,
+                selected: 0
             };
         }
     }
@@ -72,15 +75,17 @@ module.exports = function(length){
         nodes: nodes,
 
         prepare: function (element) {
-            element.class.prepare = !element.class.prepare;
+            if (!element.class.reveal && !element.class.bad) {
+                element.class.prepare = !element.class.prepare;
+            }
         },
 
         reveal: function (element, type) {
-            element.class.prepare = !element.class.prepare;
+            element.class.prepare = false;
             if(type == "good"){
-                element.class.reveal = !element.class.reveal;
+                element.class.reveal = true;
             } else {
-                element.class.bad = !element.class.bad;
+                element.class.bad = true;
             }
 
         },
@@ -89,14 +94,15 @@ module.exports = function(length){
             edge.class.animate = !edge.class.animate;
         },
 
-
-
-        clearBoard: function () {
+        totalClearBoard: function () {
             var i, j;
             for (i = 0; i < hedges.length; i++) {
                 var line = hedges[i];
                 for (j = 0; j < line.length; j++) {
                     line[j].class.animate = false;
+                    line[j].class.prepare = false;
+                    line[j].class.bad = false;
+                    line[j].class.reveal = false;
                 }
             }
 
@@ -104,8 +110,50 @@ module.exports = function(length){
                 line = vedges[i];
                 for (j = 0; j < line.length; j++) {
                     line[j].class.animate = false;
+                    line[j].class.prepare = false;
+                    line[j].class.bad = false;
+                    line[j].class.reveal = false;
+                }
+
+            }
+            for (i = 0; i < nodes.length; i++) {
+                line = nodes[i];
+                for (j = 0; j < line.length; j++) {
+                    line[j].class.animate = false;
+                    line[j].class.prepare = false;
+                    line[j].class.bad = false;
+                    line[j].class.reveal = false;
                 }
             }
+
+        },
+
+        clearBoard: function () {
+            var i, j;
+            for (i = 0; i < hedges.length; i++) {
+                var line = hedges[i];
+                for (j = 0; j < line.length; j++) {
+                    line[j].class.animate = false;
+                    line[j].class.prepare = false;
+                }
+            }
+
+            for (i = 0; i < vedges.length; i++) {
+                line = vedges[i];
+                for (j = 0; j < line.length; j++) {
+                    line[j].class.animate = false;
+                    line[j].class.prepare = false;
+                }
+
+            }
+            for (i = 0; i < nodes.length; i++) {
+                line = nodes[i];
+                for (j = 0; j < line.length; j++) {
+                    line[j].class.animate = false;
+                    line[j].class.prepare = false;
+                }
+            }
+
         }
     }
 };
