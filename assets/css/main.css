@@ -162,7 +162,7 @@ div.popup {
     z-index: 0;
 }
 
-.corner {
+.node {
     position: relative;
     float: left;
     width: 10px;
@@ -258,7 +258,7 @@ p {
     background-color: #ff2e8a;
 }
 
-.corner:hover {
+.node:hover {
     background-color: #4878ff;
 }
 
@@ -271,9 +271,21 @@ p {
     animation-fill-mode: forwards;
 }
 
-.probe.detectedEdge {
-    background-color: #33e12e !important;
+.edge.prepare {
+    background-color: #00cee1;
 }
+.node.prepare {
+    background-color: #00cee1;
+}
+
+.edge.bad{
+    background-color: #880000;
+}
+
+.node.bad{
+    background-color: #880000;
+}
+
 
 .hedge.animate {
     animation-name: edgeSelected;
@@ -311,24 +323,12 @@ p {
     animation-fill-mode: forwards;
 }
 
-.hedge.reveal {
-    background-color: #00a0e1;
-    /*    animation-name: hedgeFinal;
-        animation-duration: 1s;
-        animation-timing-function: ease;
-        animation-iteration-count: 1;
-        animation-direction: normal;
-        animation-fill-mode: forwards;*/
+.edge.reveal {
+    background-color: #12bb2b;
 }
 
-.vedge.reveal {
-    background-color: #00a0e1;
-    /*    animation-name: vedgeFinal;
-        animation-duration: 1s;
-        animation-timing-function: ease;
-        animation-iteration-count: 1;
-        animation-direction: normal;
-        animation-fill-mode: forwards;*/
+.node.reveal{
+    background-color: #12bb2b;
 }
 
 /* ==========================================================================

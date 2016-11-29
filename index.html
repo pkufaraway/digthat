@@ -17,25 +17,25 @@
         <div id = "row" v-for = "m in length" class = row>
             <div id ="edgeline" class=row>
                 <div id="line" v-for="n in length" class = edgeWrapper>
-                    <div v-bind:class="corners[m-1][n-1]"></div>
-                    <div v-bind:class="hedges[m-1][n-1]"  v-on:click="edgeClick(hedges,m-1,n-1)"></div>
+                    <div v-bind:class="nodes[m-1][n-1].class" v-on:click="nodeClick(nodes[m-1][n-1])"></div>
+                    <div v-bind:class="hedges[m-1][n-1].class"  v-on:click="edgeClick(hedges[m-1][n-1])"></div>
                 </div>
-                <div v-bind:class="corners[m-1][length]"></div>
+                <div v-bind:class="nodes[m-1][length].class" v-on:click="nodeClick(nodes[m-1][length])"></div>
             </div>
             <div id ="vedgeline" class = row>
                 <div id="vedges" v-for="n in (length + 1)" class = edgeWrapper>
-                    <div v-bind:class="vedges[m-1][n-1]" v-on:click="edgeClick(vedges,m-1,n-1)"></div>
+                    <div v-bind:class="vedges[m-1][n-1].class" v-on:click="edgeClick(vedges[m-1][n-1])"></div>
                     <div class="left"></div>
                 </div>
             </div>
         </div>
         <div id ="lastline" class=row>
             <div v-for="n in length" class = edgeWrapper>
-                <div v-bind:class="corners[length][n-1]"></div>
-                <div v-bind:class="hedges[length][n-1]" v-on:click="edgeClick(hedges,length,n-1)"></div>
+                <div v-bind:class="nodes[length][n-1].class" v-on:click="nodeClick(nodes[length][n-1])"></div>
+                <div v-bind:class="hedges[length][n-1].class" v-on:click="edgeClick(hedges[length][n-1])"></div>
             </div>
         </div>
-        <div v-bind:class="corners[length][length]"></div>
+        <div v-bind:class="nodes[length][length]"></div>
     </div>
 
     <div id="infoPanel">
@@ -50,6 +50,13 @@
                 <div id="edgeInfo" v-if="showEdgeInfo()">
                     <p>Edges left: {{edgeLeft()}} Isvalid: {{isValid()}}</p>
                     <input type="button" v-on:click="gotoDetect()" value="I finished my tunnel">
+                    <input type="button" v-on:click="clearBoard()" value="Clear and start again">
+                </div>
+            </transition>
+            <transition name="fade">
+                <div id="guessInfo" v-if="showGuessInfo()">
+                    <p>Prepare to guess now</p>
+                    <input type="button" v-on:click="finishPrepare()" value="I finished my guess">
                 </div>
             </transition>
             <input type="button" class="button grad transition" id="startEasy" value="Play in Easy Mode" style="display: block">
