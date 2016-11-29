@@ -2,34 +2,20 @@ var MapFile = require('./map');
 var TunnelFile = require('./tunnel');
 var Vue = require('./lib/vue.js');
 
-var gameStatus = "modeSelect";
-var Map = MapFile(4);
-var Tunnel = TunnelFile(20);
-var vm = new Vue({
-    el: '#gamearea',
-    data: {
-        size : 4,
-        length : 4,
-        nodes: Map.nodes,
-        hedges: Map.hedges,
-        vedges: Map.vedges,
-        maxSize: 10,
-        gameStatus: gameStatus,
-        message: 'Hello Vue!'
-    },
-
-    watch :{
-        size: function (newSize) {
-            Map = MapFile(newSize);
-            vm.nodes = Map.nodes;
-            vm.hedges = Map.hedges;
-            vm.vedges = Map.vedges;
-            vm.length = parseInt(newSize);
+new Vue.component('grid',{
+    template: '#grid_template',
+    props: ['length','Map','Tunnel','gameStatus'],
+    data: function (){
+        return {
+            length: length,
+            nodes: Map.nodes,
+            hedges: Map.hedges,
+            vedges: Map.vedges,
+            gameStatus: gameStatus,
         }
     },
-
     methods: {
-        edgeClick: function (edge) {
+        edgeClick: function (edge, Map, Tunnel, gameStatus) {
             if(gameStatus == "chooseEdges") {
                 Map.selectEdge(edge);
                 Tunnel.selectEdge(edge);
@@ -39,19 +25,19 @@ var vm = new Vue({
             }
         },
 
-        nodeClick: function (node) {
+        nodeClick: function (node, Map, Tunnel, gameStatus) {
             if(gameStatus == "prepareGuess") {
                 Map.prepare(node);
                 Tunnel.prepareNode(node);
             }
         },
 
-        clearBoard: function () {
+        clearBoard: function (Map, Tunnel) {
             Tunnel.resetTunnel(20);
             Map.clearBoard();
         },
 
-        finishPrepare: function () {
+        finishPrepare: function (Map, Tunnel) {
             var result = Tunnel.guessResult();
             var goodNodes = result.goodNodes;
             var goodEdges = result.goodEdges;
@@ -71,7 +57,7 @@ var vm = new Vue({
             }
         },
 
-        gotoDetect: function(length){
+        gotoDetect: function(Map, Tunnel, gameStatus){
             if(Tunnel.isValid(length)) {
                 Map.clearBoard();
                 gameStatus = "prepareGuess";
@@ -81,22 +67,19 @@ var vm = new Vue({
             }
         },
 
-        showEdgeInfo: function () {
+        showEdgeInfo: function (gameStatus) {
             return gameStatus == "chooseEdges";
         },
 
-        showGuessInfo: function () {
+        showGuessInfo: function (gameStatus) {
             return gameStatus == "prepareGuess";
         },
 
-        showSizer: function () {
-            return gameStatus == "modeSelect";
-        },
-        isValid: function (length) {
+        isValid: function (Tunnel) {
             return Tunnel.isValid(length);
         },
 
-        edgeLeft: function () {
+        edgeLeft: function (Tunnel) {
             return Tunnel.edgeLeft();
         },
 
@@ -104,4 +87,6 @@ var vm = new Vue({
             gameStatus = "chooseEdges";
         }
     }
-});
+});/**
+ * Created by yaoyuanliu on 11/29/16.
+ */

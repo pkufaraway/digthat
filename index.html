@@ -13,6 +13,9 @@
 
 <body>
 <div id="gamearea">
+    <div id="sizer" v-if ="showSizer()">
+        <input type="range" v-model="size" min="4" v-bind:max="maxSize">{{size}} </br>
+    </div>
     <div id="gridWrapper">
         <div id = "row" v-for = "m in length" class = row>
             <div id ="edgeline" class=row>
@@ -48,8 +51,8 @@
             <input type="button" v-on:click="startGame()" class="button grad transition" id="start" value="Play with Two People" style="display: block">
             <transition name="fade">
                 <div id="edgeInfo" v-if="showEdgeInfo()">
-                    <p>Edges left: {{edgeLeft()}} Isvalid: {{isValid()}}</p>
-                    <input type="button" v-on:click="gotoDetect()" value="I finished my tunnel">
+                    <p>Edges left: {{edgeLeft()}} Isvalid: {{isValid(length)}}</p>
+                    <input type="button" v-on:click="gotoDetect(length)" value="I finished my tunnel">
                     <input type="button" v-on:click="clearBoard()" value="Clear and start again">
                 </div>
             </transition>
