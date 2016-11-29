@@ -7,6 +7,8 @@ var Map = MapFile(4);
 var Tunnel = TunnelFile(20);
 var gameRound = 1;
 var guessRound = 1;
+var scoreOne;
+var scoreTwo;
 
 var vm = new Vue({
     el: '#gamearea',
@@ -55,14 +57,14 @@ var vm = new Vue({
             if (gameRound == 1) {
                 gameRound++;
                 guessRound = 1;
-                score = Tunnel.finalGuess();
-                alert(score);
+                scoreOne = Tunnel.finalGuess();
+                alert(scoreOne);
                 Map.totalClearBoard();
                 Tunnel.resetTunnel();
                 gameStatus = "chooseEdges";
             } else {
-                score = Tunnel.finalGuess();
-                alert(score);
+                scoreTwo = Tunnel.finalGuess();
+                alert("PlayerTwo as detector:" + scoreOne + "PlayerOne as detector:" + scoreTwo);
                 vm.endGame();
             }
         },
@@ -87,11 +89,6 @@ var vm = new Vue({
             Map.clearBoard();
             guessRound ++;
             //console.log(guessRound);
-            if (guessRound > 3) {
-                gameStatus = "finalGuess";
-                alert("choose your final guess!");
-                return;
-            }
 
             var result = Tunnel.guessResult();
             var goodNodes = result.goodNodes;
@@ -110,6 +107,12 @@ var vm = new Vue({
             }
             for(var i = 0; i < badNodes.length; i++){
                 Map.reveal(badNodes[i],"bad");
+            }
+
+            if (guessRound > 3) {
+                gameStatus = "finalGuess";
+                alert("choose your final guess!");
+                return;
             }
         },
 
