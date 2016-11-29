@@ -32,13 +32,14 @@
                 </div>
             </div>
         </div>
-        <div id ="lastline" class=row>
+        <div id ="lastline" class= row >
             <div v-for="n in length" class = edgeWrapper>
                 <div v-bind:class="nodes[length][n-1].class" v-on:click="nodeClick(nodes[length][n-1])"></div>
                 <div v-bind:class="hedges[length][n-1].class" v-on:click="edgeClick(hedges[length][n-1])"></div>
             </div>
+            <div v-bind:class="nodes[length][length].class" v-on:click="nodeClick(nodes[length][length])"></div>
         </div>
-        <div v-bind:class="nodes[length][length]"></div>
+
     </div>
 
     <div id="infoPanel">
