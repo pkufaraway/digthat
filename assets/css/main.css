@@ -97,6 +97,15 @@
     width: 800px;
 }
 
+#infoPanel{
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+#gridWrapper{
+    padding-top: 20px;
+}
+
 div.popup {
     border:none;
     padding-top:20px;
