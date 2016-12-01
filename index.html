@@ -15,6 +15,8 @@
 <body>
 <div id="gamearea">
     <div id = "infoPanel">
+        <h2> P1 Score: {{scoreTwo}} P2 Score:{{scoreOne}} (smaller is better) </h2>
+        <h2> It's {{gameStatus}} now </h2>
         <div class="configureTool" v-if="showModeSelect()">
             <div>
                 <select class="ui search dropdown" v-model="mode">

@@ -97,11 +97,6 @@
     width: 800px;
 }
 
-#infoPanel{
-    padding-left: 20px;
-    padding-top: 20px;
-}
-
 #gridWrapper{
     padding-top: 20px;
 }
@@ -224,8 +219,7 @@ body {
 }
 
 #infoPanel {
-    /*border: gray solid 1px;*/
-    border: none;
+    border: gray solid 1px;
     position: relative;
     margin-top: 0px;
     margin-bottom: 10px;
@@ -236,7 +230,7 @@ body {
     font-size: 12pt;
     /*font-variant: small-caps;*/
     line-height: 1.2;
-    width: 300px;
+    width: 500px;
 }
 
 #infoPanel input {
