@@ -14,6 +14,113 @@ var connectedNode = function (node, edge) {
   }
 };
 
+var isValidLastEdge = function (map, edge) {
+    return map[edge.type + 's'].length - 1 == edge.x;
+};
+
+
+var findShortestPathLength = function (map, start) {
+    var queue = [];
+    start.level = 0;
+    queue.push(start);
+
+    //Refresh bfs color for every node;
+    for (var i = 0; i < map.hedges.length; i++){
+        for (var j = 0; j < map.hedges[i].length; j++) {
+            map.hedges[i][j].bfsColor = 0;
+        }
+    }
+
+    for (var i = 0; i < map.vedges.length; i++){
+        for (var j = 0; j < map.vedges[i].length; j++) {
+            map.vedges[i][j].bfsColor = 0;
+        }
+    }
+
+    while (queue.length > 0){
+        var currentEdge = queue.shift();
+        //console.log("SP currentEdge");
+        //console.log(currentEdge.x + " " + currentEdge.y + " " + currentEdge.type);
+        if(isValidLastEdge(map, currentEdge)){
+            return currentEdge.level;
+        }
+        findAvailableNext(map, currentEdge).map(
+            function (edge) {
+                var color = edge.bfsColor;
+                if (color == 0) {
+                    edge.level = currentEdge.level + 1;
+                    edge.bfsColor = 1;
+                    queue.push(edge);
+                }
+            }
+        );
+        //console.log("SP next");
+        //console.log(nextResult);
+        currentEdge.color = 2;
+    }
+    return -1;
+};
+
+var findAvailableNext = function (map, current) {
+    var result = [];
+    for (var i = 0; i < map.hedges.length; i++){
+        for (var j = 0; j < map.hedges[i].length; j++){
+            if (connectedEdge(current, map.hedges[i][j])){
+                var connectedEdges = tunnel.filter(
+                    function (edge) {
+                        return connectedEdge(edge, map.hedges[i][j]);
+                    }
+                );
+                if (tunnel.indexOf(map.hedges[i][j]) < 0 && connectedEdges.length <= 1){
+                    result.push(map.hedges[i][j]);
+                }
+            }
+        }
+    }
+
+    for (var i = 0; i < map.vedges.length; i++){
+        for (var j = 0; j < map.vedges[i].length; j++){
+            if (connectedEdge(current, map.vedges[i][j])){
+                connectedEdges = tunnel.filter(
+                    function (edge) {
+                        return connectedEdge(edge, map.vedges[i][j]);
+                    }
+                );
+                if (tunnel.indexOf(map.vedges[i][j]) < 0 && connectedEdges.length <= 1){
+                    result.push(map.vedges[i][j]);
+                }
+            }
+        }
+    }
+    return result;
+};
+
+var buildPath = function (map, start, sizeLeft) {
+    var currentEdge = start;
+    while(sizeLeft > 0) {
+        var next = findAvailableNext(map, currentEdge).filter(
+            function (edge) {
+                tunnel.push(edge);
+                var len = findShortestPathLength(map, edge);
+                tunnel.pop();
+                return len < sizeLeft - 1;
+            }
+        );
+        var maxRandomLength = next.length;
+        if (isValidLastEdge(map, currentEdge)){
+            maxRandomLength++;
+        }
+        var randomIndex = Math.floor(Math.random() * (maxRandomLength));
+        if (randomIndex == next.length){
+            return;
+        } else {
+            currentEdge = next[randomIndex];
+            tunnel.push(currentEdge);
+            sizeLeft--;
+        }
+    }
+};
+
 var connectedEdge = function (edgeOne, edgeTwo) {
     if(edgeOne.type == edgeTwo.type){
         if(edgeOne.type == "hedge") {
@@ -60,6 +167,7 @@ var tryGo = function (startEdge){
 module.exports = function (length) {
     mapLength = length;
     size = Math.floor(Math.random() * (4 * length - 2 * length)) + 2 * length;
+    tunnel = [];
     return{
         //Adding tunneling APIs
         getSize: function () {
@@ -96,6 +204,20 @@ module.exports = function (length) {
             return false;
         },
 
+        easyTunnel: function (map) {
+            while(tunnel.length) {
+                tunnel.pop();
+            }
+            var randomIndex = Math.floor(Math.random() * (length));
+            var randomStart = map.hedges[0][randomIndex];
+            tunnel.push(randomStart);
+            while(!isValidLastEdge(map, tunnel[tunnel.length - 1])) {
+                tunnel = [];
+                tunnel.push(randomStart);
+                buildPath(map, randomStart, size - 1);
+            }
+        },
+
         finalGuess: function () {
             var tunnelLeft = finalTunnel.filter(
                 function (edge) {
@@ -107,8 +229,6 @@ module.exports = function (length) {
                 }
             );
             if (tunnelLeft.length == finalTunnel.length && tunnelLeft.length > 0) {
-                console.log(edgePrepare);
-                console.log(nodePrepare);
                 return edgePrepare.length + nodePrepare.length * 2;
             } else {
                 return -1;
@@ -118,7 +238,7 @@ module.exports = function (length) {
         finalSelectEdge: function(edge) {
             if (finalTunnel.indexOf(edge) < 0 && finalTunnel.length < size) {
                 finalTunnel.push(edge);
-                console.log(finalTunnel);
+                //console.log(finalTunnel);
                 return true;
             } else {
                 if (finalTunnel.indexOf(edge) >= 0) {
@@ -127,7 +247,7 @@ module.exports = function (length) {
                             return myEdge != edge;
                         }
                     );
-                    console.log(finalTunnel);
+                    //console.log(finalTunnel);
                     return true;
                 }
                 return false;
@@ -138,7 +258,6 @@ module.exports = function (length) {
         selectEdge: function (edge) {
             if(tunnel.indexOf(edge) < 0 && tunnel.length < size) {
                 tunnel.push(edge);
-                console.log(tunnel);
                 return true;
             } else {
                 if (tunnel.indexOf(edge) >= 0){
@@ -147,7 +266,6 @@ module.exports = function (length) {
                             return myEdge != edge;
                         }
                     );
-                    console.log(tunnel);
                     return true;
                 }
                 return false;
@@ -183,13 +301,30 @@ module.exports = function (length) {
             }
         },
 
-        guessResult: function () {
+        guessResult: function (isEasyMode) {
             var goodEdges = edgePrepare.filter(
                 function (prepareEdge) {
                     prepareEdge.selected = 2;
                     return tunnel.indexOf(prepareEdge) >= 0;
                 }
             );
+
+            if(isEasyMode){
+                tunnel.map(function (edge) {
+                        var connectEdges = edgePrepare.filter( function(edgeTwo){
+                            return connectedEdge(edge, edgeTwo);
+                        });
+                        var connectNodes = nodePrepare.filter( function(node){
+                            return connectedNode(node, edge);
+                        });
+                        if(connectEdges.length > 0 || connectNodes.length > 0 && goodEdges.indexOf(edge) < 0){
+                            goodEdges.push(edge);
+                            edge.selected = 2;
+                        }
+                    }
+                )
+            }
+
             var badEdges = edgePrepare.filter(
                 function (edge) {
                     return goodEdges.indexOf(edge) < 0;
@@ -203,19 +338,16 @@ module.exports = function (length) {
                             return connectedNode(node, edge);
                         }
                     );
-                    console.log(node);
-                    console.log(searchResult);
                     return searchResult.length > 0;
                 }
             );
 
-            console.log("goodnodes");
-            console.log(goodNodes);
             var badNodes = nodePrepare.filter(
                 function (node) {
                     return goodNodes.indexOf(node) < 0;
                 }
             );
+
             return {
                 goodEdges: goodEdges,
                 badEdges: badEdges,

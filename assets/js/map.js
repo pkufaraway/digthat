@@ -20,6 +20,8 @@ var initMap = function (length) {
                 x: i,
                 y: j,
                 selected: 0,
+                level: 0,
+                bfsColor: 0
             };
         }
     }
@@ -40,7 +42,9 @@ var initMap = function (length) {
                 type: "hedge",
                 x: i,
                 y: j,
-                selected: 0
+                selected: 0,
+                level: 0,
+                bfsColor: 0
             };
         }
     }

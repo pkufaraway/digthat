@@ -14,6 +14,7 @@ var game = new Vue({
         nodes: Map.nodes,
         hedges: Map.hedges,
         vedges: Map.vedges,
+        instr: false,
         gameStatus: "mode selection",
         guessRound: 1,
         gameRound: 1,
@@ -34,11 +35,24 @@ var game = new Vue({
     },
 
     methods: {
-        clearBoard: function () {
-            Tunnel.resetTunnel(Tunnel.getSize());
-            Map.clearBoard();
+        //Game logic
+        startGame: function () {
+            this.scoreTwo = 0;
+            this.scoreOne = 0;
+            Tunnel = TunnelFile(parseInt(this.size));
+            if(this.mode == "AI"){
+                Tunnel.easyTunnel(Map);
+                Map.clearBoard();
+                alert("The computer has built a tunnel, detection start now!");
+                this.gameStatus = "node/edge detection";
+                this.gameRound = 2;
+            } else {
+                alert("It's player one's turn to build a tunnel, player two, please look away");
+                this.gameStatus = "tunnel building";
+            }
         },
 
+        //When player click a edge, it may means that player is trying to build a tunnel or make a guess or make a final guess
         edgeClick: function (edge) {
             if(this.gameStatus == "tunnel building" || this.gameStatus == "tunnel guess") {
                 Map.selectEdge(edge);
@@ -53,6 +67,7 @@ var game = new Vue({
             }
         },
 
+        //After each round of guess, we need to reveal the result of guesses.
         finishGuess: function () {
             if (this.gameRound == 1) {
                 this.gameRound++;
@@ -61,7 +76,9 @@ var game = new Vue({
                 if (this.scoreOne == -1){
                     this.scoreOne = 10000;
                 }
-                alert("PlayerTwo as detector:" + this. scoreOne + "Player two, please build your tunnel now.");
+                alert("PlayerTwo as detector:"
+                    + this. scoreOne +
+                    "Player two, please build your tunnel now. Player ont please look away!");
                 Map.totalClearBoard();
                 Tunnel.resetTunnel();
                 this.gameStatus = "tunnel building";
@@ -75,6 +92,7 @@ var game = new Vue({
             }
         },
 
+        //Node can be clicked only when it is guessing.
         nodeClick: function (node) {
             if(this.gameStatus == "node/edge detection" && this.gameRound < 4) {
                 Map.prepare(node);
@@ -82,21 +100,13 @@ var game = new Vue({
             }
         },
 
-        endGame: function () {
-            console.log("123");
-            this.gameRound = 1;
-            this.guessRound = 1;
-            this.gameStatus = "mode selection";
-            console.log("Finish");
-            Map.totalClearBoard();
-        },
-
+        //When the guess if finished, we need to check the result, calculate the score.
         finishPrepare: function () {
             Map.clearBoard();
             this.guessRound ++;
             //console.log(guessRound);
 
-            var result = Tunnel.guessResult();
+            var result = Tunnel.guessResult(this.difficulty == "Easy");
             var goodNodes = result.goodNodes;
             var goodEdges = result.goodEdges;
             var badNodes = result.badNodes;
@@ -122,6 +132,29 @@ var game = new Vue({
             }
         },
 
+        //Helper functions
+        maxEdge: function () {
+            return Tunnel.getSize();
+        },
+
+        endGame: function () {
+            this.gameRound = 1;
+            this.guessRound = 1;
+            this.gameStatus = "mode selection";
+            Map.totalClearBoard();
+        },
+
+        clearBoard: function () {
+            Tunnel.resetTunnel(Tunnel.getSize());
+            Map.clearBoard();
+        },
+
+        gotoBegin: function () {
+            Map.totalClearBoard();
+            this.gameStatus = "mode selection";
+
+        },
+
         gotoDetect: function(){
             if(Tunnel.isValid(this.size)) {
                 Map.clearBoard();
@@ -132,8 +165,17 @@ var game = new Vue({
             }
         },
 
-        showScoreButton: function () {
-            return this.scoreOne > 0 && this.scoreTwo > 0 && this.gameStatus == "mode selection";
+        isValid: function () {
+            return Tunnel.isValid(this.size);
+        },
+
+        edgeLeft: function () {
+            return Tunnel.edgeLeft();
+        },
+
+        //Show/Hide logic for html element
+        showSaveButton: function () {
+            return this.scoreOne > 0 || this.scoreTwo > 0 && this.gameStatus == "mode selection";
         },
 
         showEdgeInfo: function () {
@@ -152,22 +194,20 @@ var game = new Vue({
             return this.gameStatus == "tunnel guess";
         },
 
-        isValid: function () {
-            return Tunnel.isValid(this.size);
+        showInstr: function(){
+            return this.instr;
         },
 
-        edgeLeft: function () {
-            return Tunnel.edgeLeft();
+        showBasicInfoPvP: function () {
+            return this.mode == "PvP";
         },
 
-        startGame: function () {
-            this.gameStatus = "tunnel building";
-            console.log(this.gameStatus);
-            this.scoreTwo = 0;
-            this.scoreOne = 0;
-            this.clearBoard();
-            Tunnel = TunnelFile(this.size);
-            console.log(Tunnel.getSize());
-        }
+        showBasicInfoAI: function () {
+            return this.mode == "AI";
+        },
+
+        changeInstr: function () {
+            this.instr = !this.instr;
+        },
     }
 });
