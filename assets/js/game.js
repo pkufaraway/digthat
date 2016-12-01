@@ -5,8 +5,8 @@ var Vue = require('./lib/vue.js');
 var Map = MapFile(4);
 var Tunnel = TunnelFile(20);
 
-var vm = new Vue({
-    el: '#gamearea',
+var game = new Vue({
+    el: '#gameArea',
     data: {
         size : 4,
         maxSize: 10,
@@ -71,7 +71,7 @@ var vm = new Vue({
                     this.scoreTwo = 10000;
                 }
                 alert("PlayerTwo as detector:" + this.scoreOne + "PlayerOne as detector:" + this.scoreTwo);
-                vm.endGame();
+                this.endGame();
             }
         },
 
@@ -161,11 +161,11 @@ var vm = new Vue({
         },
 
         startGame: function () {
-            vm.gameStatus = "tunnel building";
-            console.log(vm.gameStatus);
+            this.gameStatus = "tunnel building";
+            console.log(this.gameStatus);
             this.scoreTwo = 0;
             this.scoreOne = 0;
-            vm.clearBoard();
+            this.clearBoard();
             Tunnel = TunnelFile(this.size);
             console.log(Tunnel.getSize());
         }

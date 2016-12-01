@@ -3,7 +3,6 @@ var nodePrepare = [];
 var edgePrepare = [];
 var finalTunnel = [];
 var size;
-var score = 0;
 var mapLength;
 var connectedNode = function (node, edge) {
   if(edge.type == "hedge"){
@@ -107,7 +106,7 @@ module.exports = function (length) {
                     ).length > 0;
                 }
             );
-            if (tunnelLeft.length == finalTunnel.length) {
+            if (tunnelLeft.length == finalTunnel.length && tunnelLeft.length > 0) {
                 console.log(edgePrepare);
                 console.log(nodePrepare);
                 return edgePrepare.length + nodePrepare.length * 2;

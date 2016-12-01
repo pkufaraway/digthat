@@ -1,84 +1,13 @@
+#bigTitle {
+    text-align: center;
+    color: #00cee1;
+    padding: 12px 30px 0px 30px;
+}
+
 .title {
+    text-align: center;
     font-family: "Helvetica", Helvetica, sans-serif;
     margin-left: 0px;
-}
-
-#bigTitle {
-    padding: 12px 30px 0px 30px;
-}
-
-#gridWrapper {
-    position: relative;
-    width: 960px;
-    margin-left:30px;
-    margin-right:auto;
-    margin-bottom: 20px;
-    background-color: transparent;
-}
-
-#last10 {
-    float: left;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 15px;
-    bottom: 0;
-    clear: both;
-    padding: 12px 30px 0px 30px;
-}
-
-#gameArea {
-    margin-top: 20px;
-}
-
-.post {
-    margin-bottom: 25px;
-    padding: 12px 0px 0px 0px;
-    background: #f5f8fa;
-    font-family: "Helvetica", Helvetica, sans-serif;
-}
-
-.post .title {
-    height: 38px;
-    _height: 41px;
-    padding: 12px 30px 0px 0px;
-    _padding: 5px 30px 0px 0px;
-    letter-spacing: -.5px;
-    color: #00cee1;
-}
-
-.post .title a {
-    border: none;
-    color: #191919;
-}
-
-.post .meta {
-    padding-top: 20px;
-    padding-bottom: 5px;
-    text-align: left;
-    font-family: Century Gothic;
-    font-size: 11px;
-    font-style: italic;
-}
-
-.post .meta a {
-}
-
-.post .entry {
-    padding: 0px 30px 20px 30px;
-    padding-bottom: 20px;
-    text-align: justify;
-}
-
-.post table {
-    width: 100%;
-    border-collapse: collapse !important;
-    font-family: "Helvetica", Helvetica, sans-serif;
-    font-size: 12pt;
-}
-
-.post td, th {
-    padding: 5px;
-    border-collapse: collapse !important;
 }
 
 .instr {
@@ -97,67 +26,43 @@
     width: 800px;
 }
 
-#gridWrapper{
-    padding-top: 20px;
+.line{
+
 }
 
-div.popup {
-    border:none;
-    padding-top:20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    width: 400px;
-    height: 100px;
-    line-height: 1.5;
-    text-align: left;
-    display:none;
-    position:absolute;
-    left:20%;
-    top:50%;
-    margin:-40px 0 0 -120px;
-    background-color: #ff414b;
-    -moz-box-shadow: 10px 10px 5px #888888;
-    -webkit-box-shadow: 10px 10px 5px #888888;
-    -o-box-shadow: 10px 10px 5px #888888;
-    box-shadow: 10px 10px 5px #888888;
-    font-family: "Helvetica", Helvetica, sans-serif;
-    font-variant: all-small-caps;
-    font-size: 15pt;
-}
-
-
-.wrapper{
-    position: relative;
-    float: left;
-    width: auto;
-    margin-left: auto;
-    margin-right: auto;
+#gridWrapper {
+    margin:0 auto;
+    text-align:center;
+    padding: 10px;
     background-color: transparent;
 }
 
-.row {
-    clear: both;
-    float: left;
-    display: block;
-    position: relative;
+#gameArea {
+    text-align:center;
+    margin-top: 20px;
 }
-.edgeWrapper {
-    position: relative;
-    float: left;
-    width: auto;
-    margin-left: auto;
-    margin-right: auto;
+
+.vedgeWrapper {
+    display: inline-block;
+    text-align:center;
     background-color: transparent;
+    width: auto;
+}
+
+.hedgeWrapper {
+    display: inline-block;
+    text-align:center;
+    background-color: transparent;
+    width: auto;
 }
 
 .hedge {
+    display: inline-block;
     position: relative;
     float: left;
     width: 70px;
     height: 10px;
     background-color: #262626;
-    /*TODO: change back to white for final version*/
     border-radius: 3px;
     -webkit-transition: width 2s ease, height 2s ease;
     -moz-transition: width 2s ease, height 2s ease;
@@ -167,6 +72,7 @@ div.popup {
 }
 
 .node {
+    display: inline-block;
     position: relative;
     float: left;
     width: 10px;
@@ -181,6 +87,7 @@ div.popup {
 }
 
 .left {
+    display: inline-block;
     position: relative;
     float: left;
     width: 70px;
@@ -191,6 +98,7 @@ div.popup {
 }
 
 .vedge {
+    display: inline-block;
     position: relative;
     float: left;
     left: 0px;
@@ -208,6 +116,7 @@ div.popup {
 body {
     border-width: 0px;
     padding: auto;
+    text-align: center;
     background-color: #f5f8fa !important;
 }
 
@@ -219,6 +128,7 @@ body {
 }
 
 #infoPanel {
+    text-align:center;
     border: gray solid 1px;
     position: relative;
     margin-top: 0px;
@@ -228,25 +138,14 @@ body {
     padding: 10px;
     font-family: "Helvetica", Helvetica, sans-serif;
     font-size: 12pt;
-    /*font-variant: small-caps;*/
     line-height: 1.2;
-    width: 500px;
-}
-
-#infoPanel input {
-    margin-bottom: 5px;
+    width: 700px;
 }
 
 #infoPanel div {
     margin-bottom: 10px;
     margin-left: 10px;
     left: 10px;
-}
-
-p {
-    margin-top: 0;
-    margin-bottom: 10px;
-    line-height: 1.65;
 }
 
 .left:hover{
@@ -265,7 +164,7 @@ p {
     background-color: #4878ff;
 }
 
-.probe.animate {
+.node.animate {
     animation-name: probePlaced;
     animation-duration: 1s;
     animation-timing-function: ease;

@@ -13,40 +13,36 @@
 </head>
 
 <body>
-<div id="gamearea">
+
+<div id="gameArea">
     <div id = "infoPanel">
-        <h2> P1 Score: {{scoreTwo}} P2 Score:{{scoreOne}} (smaller is better) </h2>
-        <h2> It's {{gameStatus}} now </h2>
+        <div id = "basicInfo">
+            <h2> P1 Score: {{scoreTwo}} P2 Score:{{scoreOne}} (smaller is better) </h2>
+            <h2> It's {{gameStatus}} now </h2>
+        </div>
         <div class="configureTool" v-if="showModeSelect()">
-            <div>
-                <select class="ui search dropdown" v-model="mode">
-                    <option>AI</option>
-                    <option>PvP</option>
-                </select>
+            <select class="ui search dropdown" v-model="mode">
+                <option>AI</option>
+                <option>PvP</option>
+            </select>
 
-                <select class="ui search dropdown" v-model="size">
-                    <option v-for="sizeReal in sizes" v-bind:value="sizeReal">
-                        {{ sizeReal }}
-                    </option>
-                </select>
+            <select class="ui search dropdown" v-model="size">
+                <option v-for="sizeReal in sizes" v-bind:value="sizeReal">
+                    {{ sizeReal }}
+                </option>
+            </select>
 
-                <select class="ui search dropdown" v-model="difficulty">
-                    <option>Easy</option>
-                    <option>Normal</option>
-                </select>
+            <select class="ui search dropdown" v-model="difficulty">
+                <option>Easy</option>
+                <option>Normal</option>
+            </select>
 
-                <button class="ui primary button" v-on:click="startGame(gameStatus)">Start Game! </button>
+            <button class="ui primary button" v-on:click="startGame(gameStatus)">Start Game! </button>
 
-
-                <transition name="fade">
-                    <div id="saveButton" v-if="showScoreButton()">
-                        <button class="ui primary button" id="score">Save Score</button>
-                    </div>
-                </transition>
-            </div>
+            <button v-if="showScoreButton()" class="ui primary button" id="score">Save Score</button>
         </div>
 
-        <div class ="tunnelInfo">
+        <div id="tunnelInfo">
             <transition name="fade">
                 <div id="edgeInfo" v-if="showEdgeInfo()">
                     <h2>Edges left: {{edgeLeft()}} Isvalid: {{isValid()}}</h2>
@@ -66,37 +62,30 @@
 
             <transition name="fade">
                 <div id="finishGuess" v-if="showFinishGuessInfo()">
-                    <input type="button" v-on:click="finishGuess()" value="Finish Guess">
+                    <button class="ui blue button" v-on:click="finishGuess()">Finish Guess</button>
                 </div>
             </transition>
         </div>
     </div>
 
     <div id="gridWrapper">
-        <div id = "row" v-for = "m in size" class = row>
-            <div id ="edgeline" class=row>
-                <div id="line" v-for="n in size" class = edgeWrapper>
+        <template v-for = "m in size + 1" >
+            <div class = hedgeWrapper>
+                <template v-for="n in size + 1">
                     <div v-bind:class="nodes[m-1][n-1].class" v-on:click="nodeClick(nodes[m-1][n-1])"></div>
-                    <div v-bind:class="hedges[m-1][n-1].class"  v-on:click="edgeClick(hedges[m-1][n-1])"></div>
-                </div>
-                <div v-bind:class="nodes[m-1][size].class" v-on:click="nodeClick(nodes[m-1][size])"></div>
+                    <div v-if="n < size + 1" v-bind:class="hedges[m-1][n-1].class"  v-on:click="edgeClick(hedges[m-1][n-1])"></div>
+                </template>
             </div>
-            <div id ="vedgeline" class = row>
-                <div id="vedges" v-for="n in (size + 1)" class = edgeWrapper>
+            <div v-if="m < size + 1">
+                <div id="vedges" v-for="n in size + 1" class = vedgeWrapper>
                     <div v-bind:class="vedges[m-1][n-1].class" v-on:click="edgeClick(vedges[m-1][n-1])"></div>
-                    <div class="left"></div>
+                    <div v-if="n < size + 1" class="left"></div>
                 </div>
             </div>
-        </div>
-        <div id ="lastline" class= row >
-            <div v-for="n in size" class = edgeWrapper>
-                <div v-bind:class="nodes[size][n-1].class" v-on:click="nodeClick(nodes[size][n-1])"></div>
-                <div v-bind:class="hedges[size][n-1].class" v-on:click="edgeClick(hedges[size][n-1])"></div>
-            </div>
-            <div v-bind:class="nodes[size][size].class" v-on:click="nodeClick(nodes[size][size])"></div>
-        </div>
+        </template>
     </div>
 </div>
-<script type="text/javascript" src="assets/js/bundle.js" charset="utf-8"></script>
 
+<script type="text/javascript" src="assets/js/bundle.js" charset="utf-8"></script>
 </body>
+
