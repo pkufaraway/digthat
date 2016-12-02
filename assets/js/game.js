@@ -142,20 +142,27 @@ var game = new Vue({
             return Tunnel.getSize();
         },
 
+        saveScore: function () {
+            this.gameStatus = "mode selection";
+            this.scoreTwo = 0;
+            this.scoreOne = 0;
+        },
+
         endGame: function () {
             this.gameRound = 1;
             this.guessRound = 1;
-            this.gameStatus = "mode selection";
+            this.gameStatus = "game end";
             Map.totalClearBoard();
         },
 
         clearBoard: function () {
-            Tunnel.resetTunnel(Tunnel.getSize());
+            Tunnel.resetTunnel();
             Map.clearBoard();
         },
 
         gotoBegin: function () {
             Map.totalClearBoard();
+            Tunnel.resetTunnel();
             this.gameStatus = "mode selection";
 
         },
@@ -180,7 +187,7 @@ var game = new Vue({
 
         //Show/Hide logic for html element
         showSaveButton: function () {
-            return this.scoreOne > 0 || this.scoreTwo > 0 && this.gameStatus == "mode selection";
+            return (this.scoreOne > 0 || this.scoreTwo > 0) && this.gameStatus == "game end";
         },
 
         showEdgeInfo: function () {

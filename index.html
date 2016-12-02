@@ -73,10 +73,10 @@
                 <option>Normal</option>
             </select>
 
-            <button class="large ui blue basic button" v-on:click="startGame(gameStatus)">Start Game! </button>
-
-            <button v-if="showSaveButton()" class="large ui green basic button" id="score">Save Score</button>
+            <button class="large ui blue basic button" v-on:click="startGame()">Start Game! </button>
         </div>
+
+        <button v-if="showSaveButton()" class="large ui green basic button" id="score" v-on:click="saveScore()">Save Score</button>
 
         <div id="tunnelInfo">
             <transition name="fade">
