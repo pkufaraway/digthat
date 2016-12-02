@@ -39,8 +39,6 @@ var findShortestPathLength = function (map, start) {
 
     while (queue.length > 0){
         var currentEdge = queue.shift();
-        //console.log("SP currentEdge");
-        //console.log(currentEdge.x + " " + currentEdge.y + " " + currentEdge.type);
         if(isValidLastEdge(map, currentEdge)){
             return currentEdge.level;
         }
@@ -54,8 +52,6 @@ var findShortestPathLength = function (map, start) {
                 }
             }
         );
-        //console.log("SP next");
-        //console.log(nextResult);
         currentEdge.color = 2;
     }
     return -1;
@@ -229,7 +225,7 @@ module.exports = function (length) {
                 }
             );
             if (tunnelLeft.length == finalTunnel.length && tunnelLeft.length > 0) {
-                return edgePrepare.length + nodePrepare.length * 2;
+                return edgePrepare.length + nodePrepare.length;
             } else {
                 return -1;
             }
@@ -359,17 +355,16 @@ module.exports = function (length) {
         resetTunnel: function () {
             var n = nodePrepare.length;
             for(var i = 0; i < n; i++){
-                nodePrepare[i].selected = false;
+                nodePrepare[i].selected = 0;
             }
             n = edgePrepare.length;
             for(var i = 0; i < n; i++){
-                edgePrepare[i].selected = false;
+                edgePrepare[i].selected = 0;
             }
-            nodePrepare = [];
-            edgePrepare = [];
-            tunnel = [];
+            finalTunnel.length = 0;
+            nodePrepare.length = 0;
+            edgePrepare.length = 0;
+            tunnel.length = 0;
         }
-        
-
     }
 };

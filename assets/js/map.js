@@ -107,6 +107,7 @@ module.exports = function(length){
                     line[j].class.prepare = false;
                     line[j].class.bad = false;
                     line[j].class.reveal = false;
+                    line[j].selected = 0;
                 }
             }
 
@@ -117,6 +118,7 @@ module.exports = function(length){
                     line[j].class.prepare = false;
                     line[j].class.bad = false;
                     line[j].class.reveal = false;
+                    line[j].selected = 0;
                 }
 
             }
@@ -127,6 +129,7 @@ module.exports = function(length){
                     line[j].class.prepare = false;
                     line[j].class.bad = false;
                     line[j].class.reveal = false;
+                    line[j].selected = 0;
                 }
             }
 

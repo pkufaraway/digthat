@@ -40,9 +40,10 @@ var game = new Vue({
             this.scoreTwo = 0;
             this.scoreOne = 0;
             Tunnel = TunnelFile(parseInt(this.size));
+            Tunnel.resetTunnel();
+            Map.totalClearBoard();
             if(this.mode == "AI"){
                 Tunnel.easyTunnel(Map);
-                Map.clearBoard();
                 alert("The computer has built a tunnel, detection start now!");
                 this.gameStatus = "node/edge detection";
                 this.gameRound = 2;
@@ -87,7 +88,11 @@ var game = new Vue({
                 if (this.scoreTwo == -1){
                     this.scoreTwo = 10000;
                 }
-                alert("PlayerTwo as detector:" + this.scoreOne + "PlayerOne as detector:" + this.scoreTwo);
+                if (this.mode == "PvP") {
+                    alert("PlayerTwo as detector:" + this.scoreOne + ". PlayerOne as detector:" + this.scoreTwo);
+                } else {
+                    alert("Your score:" + this.scoreTwo);
+                }
                 this.endGame();
             }
         },
