@@ -145,7 +145,10 @@ var game = new Vue({
         },
 
         saveScore: function () {
-            var minScore = Math.min(this.scoreTwo, this.scoreOne);
+            var minScore = this.scoreTwo;
+            if (this.mode == "PvP") {
+                minScore = Math.min(this.scoreTwo, this.scoreOne);
+            }
             Saver.saveScore(this.winnerName, minScore);
             console.log(minScore);
             console.log(this.winnerName);
