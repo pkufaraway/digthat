@@ -1,7 +1,8 @@
 var MapFile = require('./map');
 var TunnelFile = require('./tunnel');
 var Vue = require('./lib/vue.js');
-
+var SaverFile = require('./saver');
+var Saver = SaverFile();
 var Map = MapFile(4);
 var Tunnel = TunnelFile(20);
 
@@ -15,6 +16,7 @@ var game = new Vue({
         hedges: Map.hedges,
         vedges: Map.vedges,
         instr: false,
+        winnerName: "",
         gameStatus: "mode selection",
         guessRound: 1,
         gameRound: 1,
@@ -143,9 +145,24 @@ var game = new Vue({
         },
 
         saveScore: function () {
+            Saver.saveScore(this.winnerName, this.scoreTwo);
             this.gameStatus = "mode selection";
             this.scoreTwo = 0;
             this.scoreOne = 0;
+        },
+
+        getWinner: function () {
+            if(this.mode == "PvP") {
+                if (this.scoreOne > this.scoreTwo) {
+                    return "Player One";
+                } else if (this.scoreOne == this.scoreTwo) {
+                    return "Player One && Player Two";
+                } else {
+                    return "Player Two";
+                }
+            } else {
+                return "You";
+            }
         },
 
         endGame: function () {
