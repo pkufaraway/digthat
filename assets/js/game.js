@@ -225,24 +225,9 @@ var game = new Vue({
     }
 });
 
-var saveScore = function(p1score, p2score, isAI) {
+var saveScore = function(score, name) {
     var xhr = new XMLHttpRequest()
-    var result = 'TIE';
-    if (p1score > p2score) {
-        result = 'LOSE';
-    } else if (p1score < p2score) {
-        result = 'WIN';
-    }
-
-    if (isAI) {
-        xhr.open('GET', 'dbman/saveScore.php?gamename=digthat&playername=player1&score='+result, true);
-    } else {
-        var winner = 'player1';
-        if (p1score > p2score && p1score != p2score) {
-            winner = 'player2';
-        }
-        xhr.open('GET', 'dbman/saveScore.php?gamename=digthat&playername='+winner+'&score='+result, true);
-    }
+    xhr.open('GET', 'dbman/saveScore.php?gamename=digthat&playername='+name+'&score='+score, true);
     xhr.send();
 
     if (xhr.readyState != 4 || xhr.status != 200) {
