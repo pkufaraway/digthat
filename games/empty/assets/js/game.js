@@ -145,7 +145,10 @@ var game = new Vue({
         },
 
         saveScore: function () {
-            Saver.saveScore(this.winnerName, this.scoreTwo);
+            var minScore = Math.min(this.scoreTwo, this.scoreOne);
+            Saver.saveScore(this.winnerName, minScore);
+            console.log(minScore);
+            console.log(this.winnerName);
             this.gameStatus = "mode selection";
             this.scoreTwo = 0;
             this.scoreOne = 0;
