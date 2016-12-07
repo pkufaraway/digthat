@@ -6,8 +6,8 @@
 
 <head>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
-    <script src="semantic/dist/semantic.min.js" type="text/javascript" ></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/semantic.min.css">
+    <script src="assets/css/semantic.min.js" type="text/javascript" ></script>
     <link rel="stylesheet" type="text/css" href="assets/css/main.css">
     <link rel="stylesheet" type="text/css" href="assets/css/animate.css">
 </head>
@@ -79,7 +79,7 @@
         <div v-if="showBetweenGameInfo()">
             <button class="large ui violet basic button" v-on:click="revealBoard()">{{reveal}}</button>
             <button class="large ui olive basic button" v-on:click="startNextRound()">Start Next Round</button>
-            <div>
+            <div class="startSameGame">
                 <select class="ui search dropdown" v-model="difficulty">
                     <option>Easy</option>
                     <option>Normal</option>
@@ -95,7 +95,7 @@
                 <button  class="large ui green basic button" id="score" v-on:click="saveScore()">Save Score</button>
             </div>
             <button class="large ui violet basic button" v-on:click="revealBoard()">{{reveal}}</button>
-            <div>
+            <div class="startSameGame">
                 <select class="ui search dropdown" v-model="difficulty">
                     <option>Easy</option>
                     <option>Normal</option>
