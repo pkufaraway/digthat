@@ -76,12 +76,20 @@
             <button class="large ui blue basic button" v-on:click="startGame()">Start Game! </button>
         </div>
 
+        <div v-if="showBetweenGameInfo()">
+            <button class="large ui violet basic button" v-on:click="revealBoard()">{{reveal}}</button>
+            <button class="large ui olive basic button" v-on:click="startNextRound()">Start Next Round</button>
+            <button class="large ui pink basic button" v-on:click="startSameGame()">Start a new single game with this tunnel</button>
+        </div>
+
         <div v-if="showSaveButton()">
             <h2>Winner is {{getWinner()}}</h2>
             <div class="ui action input">
                 <input type="text" placeholder="Enter Your Name.." v-model="winnerName">
                 <button  class="large ui green basic button" id="score" v-on:click="saveScore()">Save Score</button>
             </div>
+            <button class="large ui violet basic button" v-on:click="revealBoard()">{{reveal}}</button>
+            <button class="large ui pink basic button" v-on:click="startSameGame()">Start a new single game with this tunnel</button>
         </div>
 
         <div id="tunnelInfo">
@@ -92,6 +100,7 @@
                     <button class="large ui red basic button" v-on:click="clearBoard()">Clear and start again</button>
                 </div>
             </transition>
+
         </div>
 
         <div class="guessInfo">

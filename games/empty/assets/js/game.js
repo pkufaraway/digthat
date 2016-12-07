@@ -5,7 +5,7 @@ var SaverFile = require('./saver');
 var Saver = SaverFile();
 var Map = MapFile(4);
 var Tunnel = TunnelFile(20);
-
+var PriviousTunnel = [];
 var game = new Vue({
     el: '#gameArea',
     data: {
@@ -23,7 +23,8 @@ var game = new Vue({
         mode : "PvP",
         difficulty : "Normal",
         scoreOne: 0,
-        scoreTwo: 0
+        scoreTwo: 0,
+        reveal: "Reveal Tunnel"
     },
 
     watch :{
@@ -41,6 +42,7 @@ var game = new Vue({
         startGame: function () {
             this.scoreTwo = 0;
             this.scoreOne = 0;
+            this.reveal = "Reveal Tunnel";
             Tunnel = TunnelFile(parseInt(this.size));
             Tunnel.resetTunnel();
             Map.totalClearBoard();
@@ -73,18 +75,12 @@ var game = new Vue({
         //After each round of guess, we need to reveal the result of guesses.
         finishGuess: function () {
             if (this.gameRound == 1) {
-                this.gameRound++;
-                this.guessRound = 1;
                 this.scoreOne = Tunnel.finalGuess();
                 if (this.scoreOne == -1){
                     this.scoreOne = 10000;
                 }
-                alert("PlayerTwo as detector:"
-                    + this. scoreOne +
-                    "Player two, please build your tunnel now. Player ont please look away!");
-                Map.totalClearBoard();
-                Tunnel.resetTunnel();
-                this.gameStatus = "tunnel building";
+                alert("PlayerTwo as detector:" + this.scoreOne);
+                this.gameStatus = "Between two game";
             } else {
                 this.scoreTwo = Tunnel.finalGuess();
                 if (this.scoreTwo == -1){
@@ -135,6 +131,12 @@ var game = new Vue({
             if (this.guessRound > 3) {
                 this.gameStatus = "tunnel guess";
                 alert("choose your final guess!");
+                goodEdges.map(
+                  function (edge) {
+                      edge.class.animate = true;
+                  }
+                );
+                Tunnel.commitGoodEdges();
                 return;
             }
         },
@@ -208,7 +210,46 @@ var game = new Vue({
             return Tunnel.edgeLeft();
         },
 
+        revealBoard: function () {
+            Map.totalClearBoard();
+            if(this.reveal == "Reveal Tunnel"){
+                var tunnel = Tunnel.getTunnel();
+                tunnel.map(
+                    function (edge) {
+                        Map.reveal(edge,"good");
+                    }
+                );
+                this.reveal = "Hide Tunnel";
+            } else {
+                this.reveal = "Reveal Tunnel";
+            }
+
+        },
+
+        startSameGame: function () {
+            Map.totalClearBoard();
+            Tunnel.clearGuess();
+            this.mode = "AI";
+            this.gameRound = 2;
+            this.guessRound = 1;
+            this.scoreOne = 0;
+            this.scoreTwo = 0;
+            this.gameStatus = "node/edge detection";
+        },
+
+        startNextRound: function () {
+            this.gameRound++;
+            this.guessRound = 1;
+            Map.totalClearBoard();
+            Tunnel.resetTunnel();
+            this.gameStatus = "tunnel building";
+        },
+
         //Show/Hide logic for html element
+        showBetweenGameInfo: function () {
+            return this.gameStatus == "Between two game";
+        },
+
         showSaveButton: function () {
             return (this.scoreOne > 0 || this.scoreTwo > 0) && this.gameStatus == "game end";
         },

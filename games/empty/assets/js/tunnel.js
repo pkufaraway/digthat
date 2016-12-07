@@ -200,6 +200,12 @@ module.exports = function (length) {
             return false;
         },
 
+        clearGuess: function () {
+            nodePrepare = [];
+            edgePrepare = [];
+            finalTunnel = [];
+        },
+
         easyTunnel: function (map) {
             while(tunnel.length) {
                 tunnel.pop();
@@ -214,6 +220,10 @@ module.exports = function (length) {
             }
         },
 
+        getTunnel: function () {
+            return tunnel;
+        },
+
         finalGuess: function () {
             var tunnelLeft = finalTunnel.filter(
                 function (edge) {
@@ -224,7 +234,7 @@ module.exports = function (length) {
                     ).length > 0;
                 }
             );
-            if (tunnelLeft.length == finalTunnel.length && tunnelLeft.length > 0) {
+            if (tunnelLeft.length == tunnel.length && tunnelLeft.length > 0) {
                 return edgePrepare.length + nodePrepare.length;
             } else {
                 return -1;
@@ -266,6 +276,21 @@ module.exports = function (length) {
                 }
                 return false;
             }
+        },
+
+        commitGoodEdges: function () {
+            var goodEdges = edgePrepare.filter(
+                function (prepareEdge) {
+                    prepareEdge.selected = 2;
+                    return tunnel.indexOf(prepareEdge) >= 0;
+                }
+            );
+
+            goodEdges.map(
+                function(edge){
+                    finalTunnel.push(edge);
+                }
+            );
         },
 
         //Guess Part APIs
