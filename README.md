@@ -2,6 +2,10 @@
 
 A very good practice for building a front-end application. 
 
+Play it on github pages:
+
+[Github Pages Digthat](https://pkufaraway.github.io/digthat/)
+
 # Game Rules
 
 ## Overview
