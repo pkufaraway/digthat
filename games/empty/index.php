@@ -56,7 +56,7 @@
         <form id="gameSettings" class="well">
             <h3> If you want to play in a separate window, press popup </h3>
         </form>
-        <iframe src="games/empty/iframe.html" class="game" width="900" height="1500"></iframe>
+        <iframe src="games/empty/iframe.html" class="game" width="900" height="1200"></iframe>
     </article>
     <?php include $base."footer.php"; ?>
 </div>

@@ -79,7 +79,13 @@
         <div v-if="showBetweenGameInfo()">
             <button class="large ui violet basic button" v-on:click="revealBoard()">{{reveal}}</button>
             <button class="large ui olive basic button" v-on:click="startNextRound()">Start Next Round</button>
-            <button class="large ui pink basic button" v-on:click="startSameGame()">Start a new single game with this tunnel</button>
+            <div>
+                <select class="ui search dropdown" v-model="difficulty">
+                    <option>Easy</option>
+                    <option>Normal</option>
+                </select>
+                <button class="large ui pink basic button" v-on:click="startSameGame()">Start a new single game with this tunnel</button>
+            </div>
         </div>
 
         <div v-if="showSaveButton()">
@@ -89,7 +95,13 @@
                 <button  class="large ui green basic button" id="score" v-on:click="saveScore()">Save Score</button>
             </div>
             <button class="large ui violet basic button" v-on:click="revealBoard()">{{reveal}}</button>
-            <button class="large ui pink basic button" v-on:click="startSameGame()">Start a new single game with this tunnel</button>
+            <div>
+                <select class="ui search dropdown" v-model="difficulty">
+                    <option>Easy</option>
+                    <option>Normal</option>
+                </select>
+                <button class="large ui pink basic button" v-on:click="startSameGame()">Start a new single game with this tunnel</button>
+            </div>
         </div>
 
         <div id="tunnelInfo">

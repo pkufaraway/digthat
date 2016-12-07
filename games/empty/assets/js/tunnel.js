@@ -174,10 +174,6 @@ module.exports = function (length) {
             return size - tunnel.length;
         },
 
-        finishGuess: function () {
-            alert("123");
-        },
-
         isValid: function (length) {
             var i;
             for(i = 0; i < tunnel.length; i++){
@@ -278,7 +274,7 @@ module.exports = function (length) {
             }
         },
 
-        commitGoodEdges: function () {
+        commitGoodEdges: function (isEasyMode) {
             var goodEdges = edgePrepare.filter(
                 function (prepareEdge) {
                     prepareEdge.selected = 2;
@@ -286,9 +282,27 @@ module.exports = function (length) {
                 }
             );
 
+            if(isEasyMode){
+                tunnel.map(function (edge) {
+                        var connectEdges = edgePrepare.filter( function(edgeTwo){
+                            return connectedEdge(edge, edgeTwo);
+                        });
+                        var connectNodes = nodePrepare.filter( function(node){
+                            return connectedNode(node, edge);
+                        });
+                        if(connectEdges.length > 0 || connectNodes.length > 0 && goodEdges.indexOf(edge) < 0){
+                            goodEdges.push(edge);
+                            edge.selected = 2;
+                        }
+                    }
+                )
+            }
+
             goodEdges.map(
                 function(edge){
-                    finalTunnel.push(edge);
+                    if(finalTunnel.indexOf(edge) < 0) {
+                        finalTunnel.push(edge);
+                    }
                 }
             );
         },

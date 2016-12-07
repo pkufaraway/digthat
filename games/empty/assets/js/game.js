@@ -136,8 +136,7 @@ var game = new Vue({
                       edge.class.animate = true;
                   }
                 );
-                Tunnel.commitGoodEdges();
-                return;
+                Tunnel.commitGoodEdges(this.difficulty == "Easy");
             }
         },
 
@@ -152,8 +151,6 @@ var game = new Vue({
                 minScore = Math.min(this.scoreTwo, this.scoreOne);
             }
             Saver.saveScore(this.winnerName, minScore);
-            console.log(minScore);
-            console.log(this.winnerName);
             this.gameStatus = "mode selection";
             this.scoreTwo = 0;
             this.scoreOne = 0;
